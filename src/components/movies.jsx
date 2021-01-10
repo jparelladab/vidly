@@ -5,12 +5,31 @@ import {getMovies, deleteMovie} from '../services/fakeMovieService';
 
 class Movies extends Component{
   state = {
-    movies: getMovies()
+    movies: getMovies(),
+    likes: []
   };
 
- handleDelete = (movie) => {
+  handleDelete = (movie) => {
     deleteMovie(movie._id);
     this.setState({movies: getMovies()});
+  }
+
+  isLiked = (movie) => {
+    return this.state.likes.indexOf(movie) >= 0 ? true : false;
+  }
+
+  handleLike = (movie) => {
+    let likes = [...this.state.likes];
+    let index = likes.indexOf(movie);
+    console.log(index);
+    console.log('before',likes);
+    if (index === -1) {
+      likes.push(movie);
+    } else {
+      likes = likes.filter(m => m._id !== movie._id);
+    }
+    this.setState({likes});
+    console.log('after', this.state.likes);
   }
 
   render(){
@@ -29,6 +48,7 @@ class Movies extends Component{
                   <th>Stock</th>
                   <th>Rate</th>
                   <th></th>
+                  <th></th>
                 </tr>
               </thead>
             <tbody>
@@ -37,6 +57,8 @@ class Movies extends Component{
                     movie={movie}
                     key={movie._id}
                     onDelete={ this.handleDelete }
+                    onLike={this.handleLike}
+                    isLiked={this.isLiked(movie)}
                   />
                   ) }
             </tbody>

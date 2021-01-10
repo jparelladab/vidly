@@ -3,6 +3,8 @@ import Movies from './components/movies';
 import NavBar from './components/navbar';
 
 
+
+
 class App extends Component {
 
   // constructor(){
