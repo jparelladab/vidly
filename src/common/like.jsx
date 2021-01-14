@@ -9,19 +9,19 @@ class Like extends Component {
   render(){
     if (this.props.isLiked){
 
-    return(
-      <React.Fragment>
+      return(
+        <React.Fragment>
 
-        <FontAwesomeIcon icon="heart" onClick={()=>{this.props.onLike(this.props.movie)}} />
+          <FontAwesomeIcon icon="heart" onClick={()=>{this.props.onLike(this.props.movie)}} />
 
-      </React.Fragment>
-      );
+        </React.Fragment>
+        );
     } else {
       return(
-      <FontAwesomeIcon
-        icon={['far', 'heart']}
-        onClick={()=>{this.props.onLike(this.props.movie)}}
-      />
+        <FontAwesomeIcon
+          icon={['far', 'heart']}
+          onClick={()=>{this.props.onLike(this.props.movie)}}
+        />
       );
     }
   }

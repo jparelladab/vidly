@@ -15,7 +15,6 @@ class Movie extends Component {
         <td><Like onLike={this.props.onLike} isLiked={this.props.isLiked} movie={movie} /></td>
         <td><button className='btn btn-danger btn-sm' onClick={ () => this.props.onDelete(movie) }>X</button></td>
       </tr>
-
     );
   }
 }
