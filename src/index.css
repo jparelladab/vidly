@@ -12,9 +12,15 @@ code {
     monospace;
 }
 
+a {
+  color:inherit;
+}:hover{
+  color:inherit;
+}
+
 
 .movies-container {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 1fr 3fr;
   column-gap: 50px;
 }
