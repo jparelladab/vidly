@@ -20,16 +20,16 @@ import Movie from './movie';
               <tr>
                 <th
                   onClick={() => onSort('title')}
-                  className="col">Title</th>
+                  className="col cursor-pointer">Title</th>
                 <th
-                  onClick={() => onSort('genre')}
-                  className="col">Genre</th>
+                  onClick={() => onSort('genre.name')}
+                  className="col cursor-pointer">Genre</th>
                 <th
                   onClick={() => onSort('numberInStock')}
-                  className="col">Stock</th>
+                  className="col cursor-pointer">Stock</th>
                 <th
                   onClick={() => onSort('dailyRentalRate')}
-                  className="col">Rate</th>
+                  className="col cursor-pointer">Rate</th>
 
                 <th className="col"></th>
                 <th className="col"></th>

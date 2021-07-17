@@ -12,21 +12,17 @@ import ListGroup from '../common/listGroup';
 
 class Movies extends Component{
   state = {
-    movies: [],
+    movies: getMovies(),
+    genres: getGenres(),
+    sortColumn: {path: 'title', order: 'asc'},
     likes: [],
     pageSize: 4,
     currentPage: 0,
-    genres: [],
-    selectedGenre: '',
-    sortColumn: ''
+    selectedGenre: ''
   };
 
   componentDidMount(){
-    this.setState({
-      movies: getMovies(),
-      genres: getGenres(),
-      sortColumn: {path: 'title', order: 'asc'}
-    });
+
   };
 
   handleDelete = (movie) => {
@@ -68,9 +64,10 @@ class Movies extends Component{
       } else {
         order = 'asc';
       }
+    } else {
+      order = 'asc';
     }
     this.setState({sortColumn: {path: column, order}});
-    console.log(this.state.sortColumn);
   };
 
   render(){
