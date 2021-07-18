@@ -12,8 +12,8 @@ import ListGroup from '../common/listGroup';
 
 class Movies extends Component{
   state = {
-    movies: getMovies(),
-    genres: getGenres(),
+    movies: [],
+    genres: [],
     sortColumn: {path: 'title', order: 'asc'},
     likes: [],
     pageSize: 4,
@@ -22,7 +22,8 @@ class Movies extends Component{
   };
 
   componentDidMount(){
-
+    const genres = [{name: 'All Genres', _id: "0"}, ...getGenres()]
+    this.setState({movies: getMovies(), genres})
   };
 
   handleDelete = (movie) => {
@@ -30,19 +31,16 @@ class Movies extends Component{
     this.setState({movies: getMovies()});
   };
 
-  isLiked = (movie) => {
+  liked = (movie) => {
     return this.state.likes.indexOf(movie) >= 0 ? true : false;
   };
 
   handleLike = (movie) => {
-    let likes = [...this.state.likes];
-    let index = likes.indexOf(movie);
-    if (index === -1) {
-      likes.push(movie);
-    } else {
-      likes = likes.filter(m => m._id !== movie._id);
-    }
-    this.setState({likes});
+    const movies = [...this.state.movies];
+    const index = movies.indexOf(movie);
+    movies[index] = {...movies[index]};
+    movies[index].liked = !movies[index].liked;
+    this.setState({movies});
   };
 
   handlePageChange = (page) => {
@@ -50,24 +48,15 @@ class Movies extends Component{
   }
 
   handleGenreSelect = (genre) => {
+    genre = genre.name === 'All Genres' ? '' : genre;
     this.setState({
       selectedGenre: genre,
       currentPage: 0
     });
   };
 
-  handleSort = (column) => {
-    let order = this.state.sortColumn.order;
-    if (this.state.sortColumn.path === column){
-      if (order === 'asc'){
-        order = 'desc';
-      } else {
-        order = 'asc';
-      }
-    } else {
-      order = 'asc';
-    }
-    this.setState({sortColumn: {path: column, order}});
+  handleSort = (sortColumn) => {
+    this.setState({sortColumn});
   };
 
   render(){
@@ -97,10 +86,10 @@ class Movies extends Component{
           <MoviesTable
             paginatedMovies={paginatedMovies}
             count={count}
-            handleDelete={this.handleDelete}
-            handleLike={this.handleLike}
-            isLiked={this.isLiked}
+            onDelete={this.handleDelete}
+            onLike={this.handleLike}
             onSort={this.handleSort}
+            sortColumn={this.state.sortColumn}
           />
 
             <Pagination

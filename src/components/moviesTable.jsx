@@ -1,58 +1,51 @@
-import React from 'react';
+import React, {Component} from 'react';
 import Movie from './movie';
+import TableHeader from '../common/tableHeader';
+import TableBody from '../common/tableBody';
+import Like from '../common/like';
 
-
-  const MoviesTable = (props) => {
-    const {
-      count,
-      paginatedMovies,
-      handleDelete,
-      handleLike,
-      isLiked,
-      onSort } = props;
-
-    return(
-
-      <React.Fragment>
-        <p>Showing {count} movies</p>
-        <table className="table">
-            <thead className="thead-dark">
-              <tr>
-                <th
-                  onClick={() => onSort('title')}
-                  className="col cursor-pointer">Title</th>
-                <th
-                  onClick={() => onSort('genre.name')}
-                  className="col cursor-pointer">Genre</th>
-                <th
-                  onClick={() => onSort('numberInStock')}
-                  className="col cursor-pointer">Stock</th>
-                <th
-                  onClick={() => onSort('dailyRentalRate')}
-                  className="col cursor-pointer">Rate</th>
-
-                <th className="col"></th>
-                <th className="col"></th>
-              </tr>
-            </thead>
-          <tbody className="table-striped">
-              { paginatedMovies.map (movie =>
-                <Movie
-                  movie={movie}
-                  key={movie._id}
-                  onDelete={ handleDelete }
-                  onLike={handleLike}
-                  isLiked={isLiked(movie)}
+  class MoviesTable extends Component {
+    columns = [
+      {path: 'title', label: 'Title'},
+      {path: 'genre.name', label: 'Genre'},
+      {path: 'numberInStock', label: 'Stock'},
+      {path: 'dailyRentalRate', label: 'Rate'},
+      {key: 'liked', content: movie => <Like onLike={this.props.onLike} liked={movie.liked} movie={movie} />},
+      {key: 'delete', content: movie => <button className='btn btn-danger btn-sm' onClick={ () => this.props.onDelete(movie) }>X</button>}
+    ];
+    render() { 
+      const {
+        count,
+        paginatedMovies,
+        onDelete,
+        onLike,
+        onSort,
+        sortColumn} = this.props;
+    
+      return(
+        <React.Fragment>
+          <p>Showing {count} movies</p>
+          <table className="table">
+              <TableHeader 
+                columns={this.columns}
+                sortColumn={sortColumn}
+                onSort={onSort}
               />
-                ) }
-          </tbody>
-        </table>
+              <TableBody
+                data={paginatedMovies}
+                columns={this.columns}
+              />
+          </table>
+  
+  
+        </React.Fragment>
+      )  
 
-
-      </React.Fragment>
-    )
-
+    }
   }
+   
+
+
 
   export default MoviesTable;
 
