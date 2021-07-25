@@ -7,12 +7,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class Like extends Component {
   render(){
-    if (this.props.isLiked){
+    if (this.props.liked){
 
       return(
         <React.Fragment>
 
-          <FontAwesomeIcon icon="heart" onClick={()=>{this.props.onLike(this.props.movie)}} />
+          <FontAwesomeIcon icon={['fas', 'heart']} onClick={()=>{this.props.onLike(this.props.movie)}} />
 
         </React.Fragment>
         );
