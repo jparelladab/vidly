@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Movie from './movie';
-import TableHeader from '../common/tableHeader';
-import TableBody from '../common/tableBody';
+
+import Table from '../common/table';
 import Like from '../common/like';
 
   class MoviesTable extends Component {
@@ -25,18 +25,13 @@ import Like from '../common/like';
       return(
         <React.Fragment>
           <p>Showing {count} movies</p>
-          <table className="table">
-              <TableHeader 
-                columns={this.columns}
-                sortColumn={sortColumn}
-                onSort={onSort}
-              />
-              <TableBody
-                data={paginatedMovies}
-                columns={this.columns}
-              />
-          </table>
-  
+          
+          <Table
+            columns={this.columns}
+            sortColumn={sortColumn}
+            onSort={onSort}
+            data={paginatedMovies}
+          />
   
         </React.Fragment>
       )  
