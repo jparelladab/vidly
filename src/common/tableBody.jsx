@@ -3,19 +3,18 @@ import Movie from '../components/movie';
 
 class TableBody extends Component {
     render() {
-        const {data, columns} = this.props
+        const {data, columns} = this.props;
         return (  
-            <tbody className="table-striped">
-            { data.map (item =>
+          <tbody>
+          { data.map (item =>
               <Movie
                 movie={item}
                 key={item._id}
                 columns={columns}
-            />
-              ) }
-        </tbody>
-        );
-    }
-}
+              />
+          )}
+          </tbody>
+          );      
+  }}
  
 export default TableBody;
