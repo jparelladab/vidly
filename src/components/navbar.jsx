@@ -1,9 +1,30 @@
-function navbar(){
+
+// import React from "react";
+import { NavLink, Link } from "react-router-dom";
+import { Component } from 'react';
+
+class Navbar extends Component{
+  render() {
   return (
-   <nav className="navbar navbar-light bg-light mb-3">
-    <span className="navbar-brand mb-0 h1">Navbar</span>
-  </nav>
-  );
+    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <Link className="navbar-brand" to="/">Vidly</Link>
+      <div className="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul className="navbar-nav mr-auto">
+          <li className="nav-item">
+            {/* Link component, prevents page reloading and changes the url. Then the route component renders the corresponding component */}
+            <NavLink className="nav-link" to="/movies">Movies</NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink className="nav-link" to="/customers">Customers</NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink className="nav-link" to="/rentals">Rentals</NavLink>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  )
+}
 }
 
-export default navbar;
+export default Navbar;

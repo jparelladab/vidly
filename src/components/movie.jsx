@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Like from '../common/like';
+import { Link } from 'react-router-dom';
 
 
 class Movie extends Component {
