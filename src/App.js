@@ -1,16 +1,18 @@
 import React, {Component} from 'react';
 import Movies from './components/movies';
 import NavBar from './components/navbar';
-import { NavLink, Link, Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import Rentals from './components/rentals';
 import Users from './components/users';
 import NotFound from './components/notFound';
 import Customers from './components/customers';
 import MovieForm from './components/movieForm';
+import LoginForm from './components/loginForm';
 import './App.css';
 
 class App extends Component {
 
+  
   // constructor(){
   //   super();
   //   console.log('App - Constructor');
@@ -22,6 +24,7 @@ class App extends Component {
         <NavBar />
         <main className="container">
           <Switch>
+            <Route path="/login" component={LoginForm} />
             <Route path="/movies/:id" render={(props) => <MovieForm {...props}/>}></Route>
             <Route path="/rentals" component={Rentals}/>
             <Route path="/users" component={Users}/>

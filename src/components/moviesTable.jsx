@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import Movie from './movie';
 
 import Table from '../common/table';
 import Like from '../common/like';
@@ -18,8 +17,6 @@ import { Link } from 'react-router-dom';
       const {
         count,
         paginatedMovies,
-        onDelete,
-        onLike,
         onSort,
         sortColumn} = this.props;
     

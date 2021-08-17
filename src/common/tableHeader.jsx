@@ -12,7 +12,7 @@ class TableHeader extends Component {
         return null;
       }
       else {
-        if (order == 'asc') {
+        if (order === 'asc') {
           return <FontAwesomeIcon icon={faSortUp} />;
         } else {
           return <FontAwesomeIcon icon={faSortDown } />;
