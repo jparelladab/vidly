@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Movie from '../components/movie';
+import Movie from '../movie';
 
 class TableBody extends Component {
     render() {

@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import MoviesTable from './moviesTable';
-import Pagination from '../common/pagination';
+import Pagination from './common/pagination';
 import {getMovies, deleteMovie} from '../services/fakeMovieService';
 import {getGenres} from '../services/fakeGenreService'
 import {paginate} from '../utils/paginate';
 import {filter} from '../utils/filter';
 import {sortMovies} from '../utils/sort';
 import PropTypes from 'prop-types';
-import ListGroup from '../common/listGroup';
+import ListGroup from './common/listGroup';
 
 
 class Movies extends Component{
