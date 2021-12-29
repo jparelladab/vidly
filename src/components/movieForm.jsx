@@ -33,9 +33,7 @@ class MovieForm extends Form {
 
     componentDidMount(){
         console.log('component did mount')
-        console.log(this.props.location.state)
         let movie = this.props.location.state.mov;
-        // console.log('mooovie', movie);
         const movieState = {...this.state.data};
         if (movie._id){
             movieState._id = movie._id;
@@ -44,7 +42,6 @@ class MovieForm extends Form {
             movieState.dailyRentalRate = movie.dailyRentalRate;
             movieState.numberInStock = movie.numberInStock 
         }
-        console.log('mooovie', movieState);
         this.setState({data : movieState});
         
         // this.username.current.focus();
@@ -55,11 +52,7 @@ class MovieForm extends Form {
         //call the server
         // const movieId = this.props.match.params.id ;
         const movie = this.state.data;
-        console.log('submitt', movie)
         const movies = this.props.location.state.movs;
-
-
-        // console.log('Submitted', movie, movies);
         saveMovie(movie, movies);
         this.props.history.push('/movies');
     }
@@ -76,7 +69,6 @@ class MovieForm extends Form {
         // const movieId = this.props.match.params.id ;
         // const genre = movie ? movie.genre.name : ''
         const options = getGenres();
-        // console.log(genres);
         return (
         <div>
             <h1>Movie Form</h1>

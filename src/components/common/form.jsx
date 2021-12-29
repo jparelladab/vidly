@@ -19,13 +19,11 @@ class Form extends Component {
         //here under we just take the error from result.error
         const options = {abortEarly: false, stripUnknown: true };
         const {error} = Joi.validate(this.state.data, this.schema, options);
-        // console.log(error);
         if (!error) return null;
         const errors = {};
         for(let detail of error.details){
             errors[detail.path[0]] = detail.message;
         }
-        console.log(errors)
         return errors;
 
         // const {data} = this.state;
@@ -47,13 +45,11 @@ class Form extends Component {
     validateProperty = (input) => {
         // assigning dynamically one of the schemas
         // need to use either name (for normal inputs or id for selects)
-        console.log(input.id)
         const schema = (input.name) ? this[input.name + '_schema'] : this[input.id + '_schema'];
         // get the input object
         // extract the input schema into a separate schema
         // on the tutorial you are supposed to pass only the specific schema key, but it works only with the whole schema
         const {error} = Joi.validate(input.value, schema);
-        console.log(error)
 
         return error ? error.details[0].message : {};
         
@@ -121,7 +117,6 @@ class Form extends Component {
 
     renderInput = (name, label = capitalizeFirstLetter(name), type = 'text') => {
         const {data, errors} = this.state;
-        // console.log(data)
         return <Input 
             name={name}
             type={type}
