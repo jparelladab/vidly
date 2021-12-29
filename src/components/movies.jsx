@@ -9,7 +9,6 @@ import {sortMovies} from '../utils/sort';
 import PropTypes from 'prop-types';
 import ListGroup from './common/listGroup';
 
-
 class Movies extends Component{
   state = {
     movies: [],
@@ -90,6 +89,7 @@ class Movies extends Component{
         <div>
           <MoviesTable
             paginatedMovies={data}
+            movies={this.state.movies}
             count={totalCount}
             onDelete={this.handleDelete}
             onLike={this.handleLike}

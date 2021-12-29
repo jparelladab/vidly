@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import Joi  from 'joi-browser';
 import Input from './input';
+import Select from './select';
 import {capitalizeFirstLetter} from '../../utils/helperFunctions';
+import {getGenres} from '../../services/fakeGenreService';
 
 class Form extends Component {
     state = {
@@ -15,7 +17,7 @@ class Form extends Component {
         //but we can also write custom validations
         // abortEarly means terminate validation as soon as it finds one error. In the error message we only get one message
         //here under we just take the error from result.error
-        const options = {abortEarly: false};
+        const options = {abortEarly: false, stripUnknown: true };
         const {error} = Joi.validate(this.state.data, this.schema, options);
         // console.log(error);
         if (!error) return null;
@@ -23,6 +25,7 @@ class Form extends Component {
         for(let detail of error.details){
             errors[detail.path[0]] = detail.message;
         }
+        console.log(errors)
         return errors;
 
         // const {data} = this.state;
@@ -41,14 +44,16 @@ class Form extends Component {
 
     //with object destructuring
     // returs error message if any, or null
-    // validateProperty = ({name, value}) => { 
-    validateProperty = ({name, value}) => {
+    validateProperty = (input) => {
         // assigning dynamically one of the schemas
-        const schema = this[name + '_schema'];
+        // need to use either name (for normal inputs or id for selects)
+        console.log(input.id)
+        const schema = (input.name) ? this[input.name + '_schema'] : this[input.id + '_schema'];
         // get the input object
         // extract the input schema into a separate schema
         // on the tutorial you are supposed to pass only the specific schema key, but it works only with the whole schema
-        const {error} = Joi.validate(value, schema);
+        const {error} = Joi.validate(input.value, schema);
+        console.log(error)
 
         return error ? error.details[0].message : {};
         
@@ -82,7 +87,6 @@ class Form extends Component {
     handleChange = ({currentTarget: input}) => {
         //Here we modify the error and data states on input change
         const errors = {...this.state.errors};
-        console.log(input)
         const errorMessage = this.validateProperty(input);
         if (Object.keys(errorMessage).length !== 0){
             errors[input.name] = errorMessage;
@@ -94,8 +98,21 @@ class Form extends Component {
         // currentTarget renamed as input
         const data = {...this.state.data};
         // data.username = e.currentTarget.value;
-        data[input.name] = input.value;
+        if (input.name){
+            data[input.name] = input.value;
+        } else {
+            data[input.id] = input.value;
+        }
         this.setState({data, errors});
+    }
+
+    //Select has its own handleChange
+    handleChangeSelect = ({currentTarget: input}) => {
+        //here we ignore errors, as it's a dropdown
+        const data = {...this.state.data};
+        const genre = getGenres().find(g => g.name === input.value);
+        data.genre = genre;
+        this.setState({data});
     }
 
     renderSubmitButton = (label) => {
@@ -104,6 +121,7 @@ class Form extends Component {
 
     renderInput = (name, label = capitalizeFirstLetter(name), type = 'text') => {
         const {data, errors} = this.state;
+        // console.log(data)
         return <Input 
             name={name}
             type={type}
@@ -112,6 +130,18 @@ class Form extends Component {
             id={name}
             label={label}
             error={errors[name]}
+        />
+    }
+
+    renderSelect = (name, label, options) => {
+        const {data} = this.state;
+        return <Select 
+            value={data[name]['name']}
+            onChange={this.handleChangeSelect}
+            name={name}
+            id={name}
+            label={label}
+            options={options}
         />
     }
 

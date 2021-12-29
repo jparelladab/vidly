@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
   class MoviesTable extends Component {
     columns = [
-      {path: 'title', label: 'Title', content: movie => <Link to={"/movies/" + movie._id}>{movie.title}</Link>},
+      {path: 'title', label: 'Title', content: movie => <Link to={{pathname: "/movies/" + movie._id, state: {mov: movie, movs: this.props.movies}}} >{movie.title}</Link>},
       {path: 'genre.name', label: 'Genre'},
       {path: 'numberInStock', label: 'Stock'},
       {path: 'dailyRentalRate', label: 'Rate'},
@@ -22,6 +22,8 @@ import { Link } from 'react-router-dom';
     
       return(
         <React.Fragment>
+          {/* <a className="btn btn-primary" href="/movies/new">New Movie</a> */}
+          <Link className="btn btn-primary" to={{pathname: "/movies/new" , state: {mov: {}, movs: this.props.movies}}} >New Movie</Link>
           <p>Showing {count} movies</p>
           
           <Table
