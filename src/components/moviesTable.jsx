@@ -23,7 +23,7 @@ import { Link } from 'react-router-dom';
       return(
         <React.Fragment>
           {/* <a className="btn btn-primary" href="/movies/new">New Movie</a> */}
-          <Link className="btn btn-primary" to={{pathname: "/movies/new" , state: {mov: {}, movs: this.props.movies}}} >New Movie</Link>
+          <Link className="btn btn-primary" to="/movies/new"  >New Movie</Link>
           <p>Showing {count} movies</p>
           
           <Table

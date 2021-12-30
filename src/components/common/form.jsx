@@ -17,13 +17,14 @@ class Form extends Component {
         //but we can also write custom validations
         // abortEarly means terminate validation as soon as it finds one error. In the error message we only get one message
         //here under we just take the error from result.error
-        const options = {abortEarly: false, stripUnknown: true };
+        const options = {abortEarly: false, stripUnknown: true};
         const {error} = Joi.validate(this.state.data, this.schema, options);
         if (!error) return null;
         const errors = {};
         for(let detail of error.details){
             errors[detail.path[0]] = detail.message;
         }
+        console.log(errors)
         return errors;
 
         // const {data} = this.state;
@@ -43,13 +44,8 @@ class Form extends Component {
     //with object destructuring
     // returs error message if any, or null
     validateProperty = (input) => {
-        // assigning dynamically one of the schemas
-        // need to use either name (for normal inputs or id for selects)
-        const schema = (input.name) ? this[input.name + '_schema'] : this[input.id + '_schema'];
-        // get the input object
-        // extract the input schema into a separate schema
-        // on the tutorial you are supposed to pass only the specific schema key, but it works only with the whole schema
-        const {error} = Joi.validate(input.value, schema);
+        
+        const {error} = Joi.validate(input.value, this.schema[input.name]);
 
         return error ? error.details[0].message : {};
         
@@ -102,14 +98,14 @@ class Form extends Component {
         this.setState({data, errors});
     }
 
-    //Select has its own handleChange
-    handleChangeSelect = ({currentTarget: input}) => {
-        //here we ignore errors, as it's a dropdown
-        const data = {...this.state.data};
-        const genre = getGenres().find(g => g.name === input.value);
-        data.genre = genre;
-        this.setState({data});
-    }
+    // //Select has its own handleChange
+    // handleChangeSelect = ({currentTarget: input}) => {
+    //     //here we ignore errors, as it's a dropdown
+    //     const data = {...this.state.data};
+    //     const genre = getGenres().find(g => g.name === input.value);
+    //     data.genre = genre;
+    //     this.setState({data});
+    // }
 
     renderSubmitButton = (label) => {
         return <button disabled = { this.validate() } className="btn btn-primary">{label}</button>
@@ -130,9 +126,10 @@ class Form extends Component {
 
     renderSelect = (name, label, options) => {
         const {data} = this.state;
+        console.log('renderselect', data[name])
         return <Select 
-            value={data[name]['name']}
-            onChange={this.handleChangeSelect}
+            value={data[name]}
+            onChange={this.handleChange}
             name={name}
             id={name}
             label={label}

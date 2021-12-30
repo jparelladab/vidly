@@ -13,14 +13,12 @@ class RegisterForm extends Form {
     
     //schemas are dependent of each form.
     // the label attribute is the pretty version of the schema key that appears in the error message
-    username_schema = Joi.string().required().email().label('Username');
-    password_schema = Joi.string().required().min(5).label('Password');
-    name_schema = Joi.string().required().label('Name');
-    schema = Joi.object({
-        username: this.username_schema,
-        password: this.password_schema,
-        name: this.name_schema
-    });
+
+    schema = {
+        username: Joi.string().required().email().label('Username'),
+        password: Joi.string().required().min(5).label('Password'),
+        name: Joi.string().required().label('Name')
+    };
 
     componentDidMount(){
         // this.username.current.focus();

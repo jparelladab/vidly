@@ -9,6 +9,7 @@ import Customers from './components/customers';
 import MovieForm from './components/movieForm';
 import LoginForm from './components/loginForm';
 import RegisterForm from './components/registerForm';
+import { getMovie } from './services/fakeMovieService';
 import './App.css';
 
 class App extends Component {
@@ -19,6 +20,8 @@ class App extends Component {
   //   console.log('App - Constructor');
   // };
 
+
+
   render(){
     return (
       <React.Fragment>
@@ -27,8 +30,11 @@ class App extends Component {
           <Switch>
             <Route path="/login" component={LoginForm} />
             <Route path="/register" component={RegisterForm} />
-            <Route path="/movies/new" component={MovieForm} />
+            
+            {/* if we want to pass props to the component, instead of using component we use render attribute
+            passing an arrow function to the component, and there we can pass all props we want */}
             <Route path="/movies/:id" render={(props) => <MovieForm {...props}/>}></Route>
+            
             <Route path="/rentals" component={Rentals}/>
             <Route path="/users" component={Users}/>
             <Route path="/customers" component={Customers}/>

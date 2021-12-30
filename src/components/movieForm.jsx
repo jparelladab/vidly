@@ -9,40 +9,57 @@ class MovieForm extends Form {
         data: {
             _id: '',
             title: '', 
-            genre: {_id: '', name: ''},
+            genreId: '',
             numberInStock: '',
             dailyRentalRate: ''
         },
+        genres: [],
         errors: {}
     };
     // username = React.createRef();
     
     //schemas are dependent of each form.
     // the label attribute is the pretty version of the schema key that appears in the error message
-    title_schema = Joi.string().required().label('Title');
-    // genre_schema = Joi.object({_id: Joi.string(), name: Joi.string()}).required().label('Genre');
-    numberInStock_schema = Joi.number().min(0).max(100).required().label('Number in Stock');
-    dailyRentalRate_schema = Joi.number().min(0).max(10).required().label('Daily rental rate');
-    
-    schema = Joi.object().keys({
-        title: this.title_schema,
-        // genre: this.genre_schema,
-        numberInStock: this.numberInStock_schema,
-        dailyRentalRate: this.dailyRentalRate_schema
-    });
+    // title_schema = Joi.string().required().label('Title');
+    // // genre_schema = Joi.object({_id: Joi.string(), name: Joi.string()}).required().label('Genre');
+    // numberInStock_schema = Joi.number().min(0).max(100).required().label('Number in Stock');
+    // dailyRentalRate_schema = Joi.number().min(0).max(10).required().label('Daily rental rate');
+    schema = {
+        _id: Joi.string().allow(''),
+        title: Joi.string().required().label('Title'),
+        genreId: Joi.string().required(),
+        numberInStock: Joi.number().min(0).max(100).required().label('Number in Stock'),
+        dailyRentalRate: Joi.number().min(0).max(10).required().label('Daily rental rate')
+
+    }
+    // schema = Joi.object().keys({
+    //     title: this.title_schema,
+    //     // genre: this.genre_schema,
+    //     numberInStock: this.numberInStock_schema,
+    //     dailyRentalRate: this.dailyRentalRate_schema
+    // });
+
 
     componentDidMount(){
         console.log('component did mount')
-        let movie = this.props.location.state.mov;
-        const movieState = {...this.state.data};
-        if (movie._id){
+        const genres = getGenres()
+        this.setState({genres})
+        let movieId = this.props.match.params.id
+        if (movieId === 'new') return
+        let movie = getMovie(movieId)
+        if (!movie){
+            console.log('not found path. redirecting')
+            return this.props.history.replace('/not-found');
+        } else {
+            const movieState = {...this.state.data};
             movieState._id = movie._id;
             movieState.title = movie.title;
-            movieState.genre = movie.genre;
+            movieState.genreId = movie.genre._id;
             movieState.dailyRentalRate = movie.dailyRentalRate;
             movieState.numberInStock = movie.numberInStock 
+            this.setState({data : movieState});
         }
-        this.setState({data : movieState});
+        
         
         // this.username.current.focus();
     }
@@ -52,8 +69,8 @@ class MovieForm extends Form {
         //call the server
         // const movieId = this.props.match.params.id ;
         const movie = this.state.data;
-        const movies = this.props.location.state.movs;
-        saveMovie(movie, movies);
+        // const movies = this.props.location.state.movs;
+        saveMovie(movie);
         this.props.history.push('/movies');
     }
 
@@ -68,13 +85,13 @@ class MovieForm extends Form {
     render(){
         // const movieId = this.props.match.params.id ;
         // const genre = movie ? movie.genre.name : ''
-        const options = getGenres();
+        const options = this.state.genres;
         return (
         <div>
             <h1>Movie Form</h1>
             <form onSubmit={this.handleSubmit}>
                 {this.renderInput('title', 'Title')}
-                {this.renderSelect('genre', 'Genre', options)}
+                {this.renderSelect('genreId', 'Genre', options)}
                 {this.renderInput('numberInStock', 'Number in Stock' )}
                 {this.renderInput('dailyRentalRate', 'Daily Rental Rate')}
 

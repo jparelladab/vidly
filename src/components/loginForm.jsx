@@ -14,12 +14,16 @@ class LoginForm extends Form {
     
     //schemas are dependent of each form.
     // the label attribute is the pretty version of the schema key that appears in the error message
-    username_schema = Joi.string().required().label('Username');
-    password_schema = Joi.string().required().label('Password');
-    schema = Joi.object({
-        username: this.username_schema,
-        password: this.password_schema
-    });
+    // username_schema = Joi.string().required().label('Username');
+    // password_schema = Joi.string().required().label('Password');
+    schema = {
+        username: Joi.string().required().label('Username'),
+        password: Joi.string().required().label('Password')
+    }
+    // schema = Joi.object({
+    //     username: this.username_schema,
+    //     password: this.password_schema
+    // });
 
     componentDidMount(){
         // this.username.current.focus();
