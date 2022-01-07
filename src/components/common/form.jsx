@@ -3,7 +3,6 @@ import Joi  from 'joi-browser';
 import Input from './input';
 import Select from './select';
 import {capitalizeFirstLetter} from '../../utils/helperFunctions';
-import {getGenres} from '../../services/fakeGenreService';
 
 class Form extends Component {
     state = {
@@ -98,15 +97,6 @@ class Form extends Component {
         this.setState({data, errors});
     }
 
-    // //Select has its own handleChange
-    // handleChangeSelect = ({currentTarget: input}) => {
-    //     //here we ignore errors, as it's a dropdown
-    //     const data = {...this.state.data};
-    //     const genre = getGenres().find(g => g.name === input.value);
-    //     data.genre = genre;
-    //     this.setState({data});
-    // }
-
     renderSubmitButton = (label) => {
         return <button disabled = { this.validate() } className="btn btn-primary">{label}</button>
     }
@@ -124,9 +114,9 @@ class Form extends Component {
         />
     }
 
+    // Special case because we need to pass the options
     renderSelect = (name, label, options) => {
         const {data} = this.state;
-        console.log('renderselect', data[name])
         return <Select 
             value={data[name]}
             onChange={this.handleChange}

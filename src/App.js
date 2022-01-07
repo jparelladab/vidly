@@ -14,10 +14,13 @@ import './App.css';
 
 class App extends Component {
 
+  // In the constructor method we have access to "this"
+  // Thats where we can redeclare class methods bound to "this"
   
   // constructor(){
   //   super();
   //   console.log('App - Constructor');
+  // this.handleIncrement = this.handleIncrement.bind(this)
   // };
 
 

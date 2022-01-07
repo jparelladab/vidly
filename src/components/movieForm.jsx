@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Form from './common/form';
 import Joi from 'joi-browser';
-import { saveMovie, getMovie } from '../services/fakeMovieService';
-import { getGenres } from '../services/fakeGenreService';
+import { saveMovie, getMovie } from '../services/movieService';
+import { getGenres } from '../services/genreService';
 
 class MovieForm extends Form {
     state = {
@@ -40,13 +40,13 @@ class MovieForm extends Form {
     // });
 
 
-    componentDidMount(){
+    async componentDidMount(){
         console.log('component did mount')
-        const genres = getGenres()
+        const genres = await getGenres()
         this.setState({genres})
         let movieId = this.props.match.params.id
         if (movieId === 'new') return
-        let movie = getMovie(movieId)
+        let movie = await getMovie(movieId)
         if (!movie){
             console.log('not found path. redirecting')
             return this.props.history.replace('/not-found');

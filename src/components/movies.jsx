@@ -1,13 +1,15 @@
 import React, {Component} from 'react';
 import MoviesTable from './moviesTable';
 import Pagination from './common/pagination';
-import {getMovies, deleteMovie} from '../services/fakeMovieService';
-import {getGenres} from '../services/fakeGenreService'
+import {getMovies, deleteMovie} from '../services/movieService';
+import {getGenres} from '../services/genreService';
 import {paginate} from '../utils/paginate';
 import {filter} from '../utils/filter';
 import {sortMovies} from '../utils/sort';
 import PropTypes from 'prop-types';
 import ListGroup from './common/listGroup';
+import SearchBar from './searchBar';
+import { Link } from 'react-router-dom';
 
 class Movies extends Component{
   state = {
@@ -17,17 +19,20 @@ class Movies extends Component{
     likes: [],
     pageSize: 4,
     currentPage: 0,
-    selectedGenre: ''
+    selectedGenre: '',
+    searchTerm: ''
   };
 
-  componentDidMount(){
-    const genres = [{name: 'All Genres', _id: "0"}, ...getGenres()]
-    this.setState({movies: getMovies(), genres})
+  async componentDidMount(){
+    const genresDB = await getGenres();
+    const genres = [{name: 'All Genres', _id: "0"}, ...genresDB];
+    console.log(genres);
+    this.setState({movies: await getMovies(), genres})
   };
 
-  handleDelete = (movie) => {
+  handleDelete = async(movie) => {
     deleteMovie(movie._id);
-    this.setState({movies: getMovies()});
+    this.setState({movies: await getMovies()});
   };
 
   liked = (movie) => {
@@ -50,13 +55,23 @@ class Movies extends Component{
     genre = genre.name === 'All Genres' ? '' : genre;
     this.setState({
       selectedGenre: genre,
-      currentPage: 0
+      currentPage: 0,
+      searchTerm: ''
     });
   };
 
   handleSort = (sortColumn) => {
     this.setState({sortColumn});
   };
+
+  handleSearch = async(searchTerm) => {
+    let movies = await getMovies();
+    console.log(searchTerm);
+    // let moviesLowerCase = movies.forEach(mov => mov.title.toLowerCase())
+    movies = movies.filter(m => m.title.toLowerCase().includes(searchTerm.toLowerCase()));
+    
+    this.setState({movies, searchTerm, selectedGenre: '', currentPage: 0});
+  }
 
   getPagedData = () => {
     const { pageSize, currentPage, movies, selectedGenre, sortColumn } = this.state;
@@ -70,6 +85,7 @@ class Movies extends Component{
   render(){
     //we refactor into getPagedData out of render() method
     const {totalCount, data} = this.getPagedData();
+    const {searchTerm} = this.state;
 
     if (totalCount === 0) return <p>There are no movies</p>
 
@@ -87,10 +103,12 @@ class Movies extends Component{
         />
 
         <div>
+          <Link className="btn btn-primary" to="/movies/new">New Movie</Link>
+          <p>Showing {totalCount} movies</p>
+          <SearchBar searchTerm={searchTerm} onChange={this.handleSearch} />
           <MoviesTable
             paginatedMovies={data}
             movies={this.state.movies}
-            count={totalCount}
             onDelete={this.handleDelete}
             onLike={this.handleLike}
             onSort={this.handleSort}

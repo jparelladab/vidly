@@ -8,3 +8,7 @@ export function filter(items, genre){
       return items;
     }
 }
+
+export function filterMovieTitle(movies, term){
+  return movies.filter(m => m.title.includes(term))
+}

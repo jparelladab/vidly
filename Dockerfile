@@ -4,6 +4,7 @@ WORKDIR /app
 COPY package.json ./
 COPY package-lock.json ./
 RUN npm install
+RUN npm i axios@0.18 react-toastify@4.1
 CMD ["npm", "start"]
 
 
