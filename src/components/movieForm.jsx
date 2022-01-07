@@ -32,45 +32,51 @@ class MovieForm extends Form {
         dailyRentalRate: Joi.number().min(0).max(10).required().label('Daily rental rate')
 
     }
-    // schema = Joi.object().keys({
-    //     title: this.title_schema,
-    //     // genre: this.genre_schema,
-    //     numberInStock: this.numberInStock_schema,
-    //     dailyRentalRate: this.dailyRentalRate_schema
-    // });
 
-
+    // not sure if those async await here are compulsory
     async componentDidMount(){
-        console.log('component did mount')
-        const genres = await getGenres()
+        await this.populateGenres();
+        await this.populateMovie();
+    }
+
+    populateGenres = async() => {
+        const {data: genres} = await getGenres();
         this.setState({genres})
-        let movieId = this.props.match.params.id
-        if (movieId === 'new') return
-        let movie = await getMovie(movieId)
-        if (!movie){
-            console.log('not found path. redirecting')
-            return this.props.history.replace('/not-found');
-        } else {
-            const movieState = {...this.state.data};
-            movieState._id = movie._id;
-            movieState.title = movie.title;
-            movieState.genreId = movie.genre._id;
-            movieState.dailyRentalRate = movie.dailyRentalRate;
-            movieState.numberInStock = movie.numberInStock 
+    }
+
+    populateMovie = async() => {
+        try {
+            const movieId = this.props.match.params.id
+            if (movieId === 'new') return
+
+            const {data: movie} = await getMovie(movieId)
+            const movieState = this.mapDataToView(movie)
             this.setState({data : movieState});
+        } catch (ex){
+            if(ex.response && ex.response.status === 404){
+                console.log('not found path. redirecting')
+                this.props.history.replace('/not-found');
+            }
         }
-        
-        
-        // this.username.current.focus();
+    }
+
+    mapDataToView = (data) => {
+        const movieState = {...this.state.data};
+        movieState._id = data._id;
+        movieState.title = data.title;
+        movieState.genreId = data.genre._id;
+        movieState.dailyRentalRate = data.dailyRentalRate;
+        movieState.numberInStock = data.numberInStock;
+        return movieState;
     }
 
     // this method will be specific for each form
-    doSubmit = () => {
+    doSubmit = async() => {
         //call the server
         // const movieId = this.props.match.params.id ;
         const movie = this.state.data;
         // const movies = this.props.location.state.movs;
-        saveMovie(movie);
+        await saveMovie(movie);
         this.props.history.push('/movies');
     }
 

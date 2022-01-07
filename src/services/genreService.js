@@ -1,4 +1,5 @@
 import http from "./httpService";
+import {apiUrl} from "../config.json";
 
 // export const genres_array = [
 //   { _id: "5b21ca3eeb7f6fbccd471818", name: "Action" },
@@ -7,6 +8,5 @@ import http from "./httpService";
 // ];
 
 export async function getGenres() {
-    const genres = await http.get('http://localhost:3900/api/genres');
-  return genres.data.filter(g => g);
+    return await http.get(apiUrl + '/genres');
 }

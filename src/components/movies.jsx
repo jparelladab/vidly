@@ -10,6 +10,8 @@ import PropTypes from 'prop-types';
 import ListGroup from './common/listGroup';
 import SearchBar from './searchBar';
 import { Link } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class Movies extends Component{
   state = {
@@ -24,15 +26,29 @@ class Movies extends Component{
   };
 
   async componentDidMount(){
-    const genresDB = await getGenres();
+    const {data: genresDB} = await getGenres();
+    console.log(genresDB);
     const genres = [{name: 'All Genres', _id: "0"}, ...genresDB];
-    console.log(genres);
-    this.setState({movies: await getMovies(), genres})
+    const {data: movies} = await getMovies();
+    this.setState({movies, genres})
   };
 
   handleDelete = async(movie) => {
-    deleteMovie(movie._id);
-    this.setState({movies: await getMovies()});
+    const originalMovies = this.state.movies;
+    const movies = originalMovies.filter(m => m._id !== movie._id)
+    this.setState({movies});
+    // we use try catch to catch vidly-api exceptions and use a toast to display it
+    // it's also important because we need to UNDO the changes
+    try{
+      await deleteMovie(movie._id);
+    }catch(ex){
+      if (ex.response && ex.response.status === 404){
+        console.log('there should be a toast');
+        toast.error('This movie has already been deleted');
+        this.setState({movies: originalMovies})
+      }
+    }
+    
   };
 
   liked = (movie) => {
@@ -65,8 +81,7 @@ class Movies extends Component{
   };
 
   handleSearch = async(searchTerm) => {
-    let movies = await getMovies();
-    console.log(searchTerm);
+    let {data: movies} = await getMovies();
     // let moviesLowerCase = movies.forEach(mov => mov.title.toLowerCase())
     movies = movies.filter(m => m.title.toLowerCase().includes(searchTerm.toLowerCase()));
     
@@ -91,6 +106,7 @@ class Movies extends Component{
 
     return (
       <div className="movies-container">
+        
         <ListGroup
           items={this.state.genres}
           selectedItem={this.state.selectedGenre}
@@ -103,6 +119,7 @@ class Movies extends Component{
         />
 
         <div>
+        <ToastContainer />
           <Link className="btn btn-primary" to="/movies/new">New Movie</Link>
           <p>Showing {totalCount} movies</p>
           <SearchBar searchTerm={searchTerm} onChange={this.handleSearch} />
